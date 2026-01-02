@@ -82,7 +82,7 @@ const Register = () => {
                 </Link>
             </Typography>
 
-            <table>
+            {/* <table>
                 <thead>
                     <tr>
                         <th>Username</th>
@@ -99,7 +99,7 @@ const Register = () => {
                         </tr>
                     ))}
                 </tbody>
-            </table>
+            </table> */}
 
             <ToastContainer position="bottom-right" transition={Slide} />
         </>
