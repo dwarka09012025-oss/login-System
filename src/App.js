@@ -4,7 +4,6 @@ import Login from './Pages/Login';
 import Register from './Pages/Register';
 import Home from './components/Home';
 import Navbar from './components/Navbar'; // Navbar import karein
-import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
 
 function App() {
 
@@ -26,17 +25,15 @@ function App() {
         </Route>
 
         <Route exact path="/">
-          {/* <Home /> */}
           {inAuth ? (
             <div style={{ textAlign: 'center', marginTop: '50px' }}>
               <h1>Welcome, {username}!</h1>
               <p>You have successfully logged in.</p>
             </div>
           ) : (
-            <Redirect to="/login" />
+            <Home />
           )}
         </Route>
-
 
         {/* <Route path="*">
           <h1 style={{ textAlign: 'center' }}>404 - Not Found</h1>
