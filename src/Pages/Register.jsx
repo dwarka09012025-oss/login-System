@@ -1,16 +1,24 @@
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import axios from 'axios';
 import { Field, Form, Formik } from 'formik';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom/cjs/react-router-dom';
+import axios from 'axios';
+import {
+    TextField,
+    Button,
+    Typography,
+    Container,
+    Box,
+    Paper,
+    Avatar,
+    Link as MuiLink
+} from '@mui/material';
+import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
+import { Link } from 'react-router-dom';
 import { Slide, toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
-
     const [user, setUser] = useState([]);
-    const ini = { username: '', email: '', password: '' }
+    const ini = { username: '', email: '', password: '' };
     const token = 'MYeZzKQ5JmDdUvG5';
 
     useEffect(() => {
@@ -19,17 +27,16 @@ const Register = () => {
 
     const loginData = () => {
         axios.get('https://generateapi.techsnack.online/api/loginapp', {
-            headers: { Authorization: token } 
+            headers: { Authorization: token }
         })
             .then((res) => {
-                console.log(res);
                 setUser(res.data.Data || []);
             })
             .catch((err) => console.error("Fetch error:", err));
     };
 
     const postData = (values, { resetForm }) => {
-        if (values.email === '' || values.password === '' || values.username === '') {
+        if (!values.email || !values.password || !values.username) {
             toast.error("Please fill all the fields");
             return;
         }
@@ -37,7 +44,6 @@ const Register = () => {
         const existingUser = user.find((item) => item.email === values.email);
         if (existingUser) {
             toast.error("User with this email already exists");
-            resetForm();
             return;
         }
 
@@ -48,8 +54,7 @@ const Register = () => {
             }
         })
             .then(() => {
-                // console.log("Registered");
-                toast.success("Register Successfully!");
+                toast.success("Registered Successfully!");
                 resetForm();
                 setTimeout(() => {
                     window.location.href = '/login';
@@ -62,25 +67,89 @@ const Register = () => {
     }
 
     return (
-        <>
-            <Formik initialValues={ini} onSubmit={postData} >
-                <Form>
-                    <Field name="username" label="User Name" as={TextField} variant="outlined" /><br /><br />
-                    <Field name="email" type="email" label="Email" as={TextField} variant="outlined" /><br /><br />
-                    <Field name="password" type="number" label="Password" as={TextField} variant="outlined" /><br /><br />
+        <Container component="main" maxWidth="xs">
+            <Box
+                sx={{
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+            >
+                <Paper
+                    elevation={6}
+                    sx={{
+                        p: 4,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        borderRadius: 2,
+                        width: '100%'
+                    }}
+                >
+                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                        <PersonAddOutlinedIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h5" sx={{ mb: 3 }}>
+                        Create Account
+                    </Typography>
 
-                    <Button type="submit" variant='contained'>
-                        Submit
-                    </Button><br /><br />
-                </Form>
-            </Formik>
-
-            <Typography>
-                Already have an account?{' '}
-                <Link to="/login" style={{ textDecoration: 'none', color: '#1976d2' }}>
-                    Login
-                </Link>
-            </Typography>
+                    <Formik initialValues={ini} onSubmit={postData}>
+                        {() => (
+                            <Form style={{ width: '100%' }}>
+                                <Field
+                                    name="username"
+                                    label="User Name"
+                                    as={TextField}
+                                    variant="outlined"
+                                    fullWidth
+                                    margin="normal"
+                                />
+                                <Field
+                                    name="email"
+                                    type="email"
+                                    label="Email Address"
+                                    as={TextField}
+                                    variant="outlined"
+                                    fullWidth
+                                    margin="normal"
+                                />
+                                <Field
+                                    name="password"
+                                    type="number"
+                                    label="Password"
+                                    as={TextField}
+                                    variant="outlined"
+                                    fullWidth
+                                    margin="normal"
+                                />
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    sx={{ mt: 3, mb: 2, py: 1.2 }}
+                                >
+                                    Register
+                                </Button>
+                                <Box sx={{ textAlign: 'center' }}>
+                                    <Typography variant="body2">
+                                        Already have an account?{' '}
+                                        <MuiLink
+                                            component={Link}
+                                            to="/login"
+                                            underline="hover"
+                                            sx={{ fontWeight: 'bold' }}
+                                        >
+                                            Login
+                                        </MuiLink>
+                                    </Typography>
+                                </Box>
+                            </Form>
+                        )}
+                    </Formik>
+                </Paper>
+            </Box>
 
             {/* <table>
                 <thead>
@@ -102,8 +171,8 @@ const Register = () => {
             </table> */}
 
             <ToastContainer position="bottom-right" transition={Slide} />
-        </>
-    )
+        </Container>
+    );
 }
 
 export default Register;
